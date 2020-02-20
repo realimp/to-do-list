@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pro.nikolaev.todolist.api.requests.ProfileUpdateRequest;
 import pro.nikolaev.todolist.api.requests.RegisterRequest;
 import pro.nikolaev.todolist.entities.User;
 import pro.nikolaev.todolist.repositories.UserRepository;
@@ -44,5 +45,14 @@ public class AccountService {
         User currentUser = getCurrentUser();
         currentUser.setActiveList(listsService.findById(id));
         userRepository.saveAndFlush(currentUser);
+    }
+
+    public String updateProfile(ProfileUpdateRequest profileUpdateRequest) {
+        User currentUser = getCurrentUser();
+        currentUser.setFirstName(profileUpdateRequest.getFirstName());
+        currentUser.setLastName(profileUpdateRequest.getLastName());
+        currentUser.setEmail(profileUpdateRequest.getEmail());
+        userRepository.saveAndFlush(currentUser);
+        return "redirect:/account/profile";
     }
 }
