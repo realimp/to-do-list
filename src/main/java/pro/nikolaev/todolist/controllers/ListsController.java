@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pro.nikolaev.todolist.api.requests.AddTaskRequest;
+import pro.nikolaev.todolist.api.requests.NewListRequest;
 import pro.nikolaev.todolist.entities.TasksList;
 import pro.nikolaev.todolist.services.AccountService;
 import pro.nikolaev.todolist.services.ListsService;
@@ -30,9 +28,24 @@ public class ListsController {
         return new AddTaskRequest();
     }
 
+    @ModelAttribute("newList")
+    public NewListRequest newListRequest() {
+        return new NewListRequest();
+    }
+
     @GetMapping("/")
     public String showList(Model model) {
         List<TasksList> lists = accountService.getCurrentUser().getLists();
+        TasksList activeList = accountService.getCurrentUser().getActiveList();
+        model.addAttribute("taskLists", lists);
+        model.addAttribute("activeList", activeList);
+        return "index";
+    }
+
+    @GetMapping("/lists/{id}")
+    public String showList(@PathVariable int id, Model model) {
+        List<TasksList> lists = accountService.getCurrentUser().getLists();
+        accountService.setActiveList(id);
         TasksList activeList = accountService.getCurrentUser().getActiveList();
         model.addAttribute("taskLists", lists);
         model.addAttribute("activeList", activeList);
@@ -49,5 +62,17 @@ public class ListsController {
         model.addAttribute("taskLists", lists);
         model.addAttribute("activeList", activeList);
         return listsService.addTask(addTaskRequest);
+    }
+
+    @PostMapping("/lists")
+    public String newList(@ModelAttribute("newList") @Valid NewListRequest newListRequest, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "index";
+        }
+        List<TasksList> lists = accountService.getCurrentUser().getLists();
+        TasksList activeList = accountService.getCurrentUser().getActiveList();
+        model.addAttribute("taskLists", lists);
+        model.addAttribute("activeList", activeList);
+        return listsService.newList(newListRequest);
     }
 }
