@@ -39,4 +39,10 @@ public class AccountService {
     public User getCurrentUser() {
         return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
+
+    public void setActiveList(int id) {
+        User currentUser = getCurrentUser();
+        currentUser.setActiveList(listsService.findById(id));
+        userRepository.saveAndFlush(currentUser);
+    }
 }

@@ -19,6 +19,14 @@ public class TasksList {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    public TasksList() {
+    }
+
+    public TasksList(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
+
     public int getId() {
         return id;
     }
