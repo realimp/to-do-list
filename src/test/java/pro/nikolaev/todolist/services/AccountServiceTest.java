@@ -34,6 +34,9 @@ public class AccountServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private ListsService listsService;
+
     @BeforeAll
     public static void setUp() {
         user = new User();
@@ -67,6 +70,6 @@ public class AccountServiceTest {
         when(userRepository.saveAndFlush(any(User.class))).thenReturn(user);
 
         Assertions.assertEquals(expected, accountService.register(request));
-        verify(userRepository, times(1)).saveAndFlush(any(User.class));
+        verify(userRepository, times(2)).saveAndFlush(any(User.class));
     }
 }

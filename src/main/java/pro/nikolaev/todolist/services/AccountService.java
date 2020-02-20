@@ -1,6 +1,8 @@
 package pro.nikolaev.todolist.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pro.nikolaev.todolist.api.requests.RegisterRequest;
 import pro.nikolaev.todolist.entities.User;
@@ -11,6 +13,12 @@ public class AccountService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ListsService listsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -20,8 +28,15 @@ public class AccountService {
         newUser.setFirstName(request.getFirstName());
         newUser.setLastName(request.getLastName());
         newUser.setEmail(request.getEmail());
-        newUser.setPassword(request.getPassword());
-        userRepository.saveAndFlush(newUser);
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        User savedUser = userRepository.saveAndFlush(newUser);
+        savedUser.setActiveList(listsService.createDefaultList(savedUser));
+        userRepository.saveAndFlush(savedUser);
+
         return "redirect:/";
+    }
+
+    public User getCurrentUser() {
+        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

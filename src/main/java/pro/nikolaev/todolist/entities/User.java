@@ -1,6 +1,7 @@
 package pro.nikolaev.todolist.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -13,6 +14,13 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+
+    @OneToOne
+    @JoinColumn(name = "active_list", referencedColumnName = "id")
+    private TasksList activeList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TasksList> lists;
 
     public int getId() {
         return id;
@@ -52,5 +60,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public TasksList getActiveList() {
+        return activeList;
+    }
+
+    public void setActiveList(TasksList activeList) {
+        this.activeList = activeList;
+    }
+
+    public List<TasksList> getLists() {
+        return lists;
+    }
+
+    public void setLists(List<TasksList> lists) {
+        this.lists = lists;
     }
 }
