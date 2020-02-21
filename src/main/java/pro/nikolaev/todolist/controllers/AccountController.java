@@ -56,4 +56,9 @@ public class AccountController {
         model.addAttribute("taskLists", lists);
         return "settings";
     }
+
+    @GetMapping("/delete")
+    public String deleteAccount(Model model) {
+        return "redirect:/";
+    }
 }

@@ -61,29 +61,41 @@
         </div>
     </div>
 </nav>
-<section id="modals" class="container mt-5 pb-5">
+<section class="container mt-5">
+    <br/>
+</section>
+<section class="container mt-5">
     <div class="row">
-        <div class="col-md-12">
-            <div class="container-fluid">
-                <div class="position-relative" style="z-index:1000">
-                    <div id="myModal" class="modal d-block position-relative copyable" tabIndex="-1" role="dialog"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
+        <div class="col-auto">
+            <div class="card border-primary h-100 pr-5">
+                <div class="card-body d-flex flex-column align-items-start">
+                    <h2 class="card-title text-primary">Settings</h2>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+                        Delete my account
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="text-primary">Settings</h3>
+                                    <h5 class="modal-title" id="staticBackdropLabel">Delete?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="container-fluid">
-
-                                    </div>
+                                    Are you sure you want to delete your account
                                 </div>
                                 <div class="modal-footer">
-
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                    <a class="btn btn-primary" href="/account/delete" role="button">Yes</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
