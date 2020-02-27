@@ -16,6 +16,8 @@ public class Task {
     @JoinColumn(name = "list_id", referencedColumnName = "id")
     private TasksList list;
 
+    private boolean completed;
+
     public Task() {
     }
 
@@ -53,5 +55,13 @@ public class Task {
 
     public void setList(TasksList list) {
         this.list = list;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

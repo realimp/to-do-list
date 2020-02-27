@@ -80,19 +80,23 @@
                                                     th:each="task : ${activeList.tasks}">
                                                     <div class="clearfix input-group">
                                                         <div class="input-group-prepend">
-                                                            <div class="input-group-text">
-                                                              <input type="checkbox">
-                                                            </div>
+                                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/toggle/' + ${task.id}"
+                                                               class="btn btn-outline-dark btn-sm">
+                                                                    <img src="/img/check-circle.svg" alt="done" title="done" class="position-relative" th:classappend="${task.completed} ? visible : 'invisible d-none'">
+                                                                    <img src="/img/circle.svg" alt="undone" title="undone" class="position-relative" th:classappend="${task.completed} ? 'invisible d-none' : visible">
+                                                            </a>
                                                         </div>
                                                         <input type="text" readonly class="form-control-plaintext text-primary form-control-sm ml-3" id="staticEmail"
                                                          th:value="${task.task}">
                                                         <div class="btn-group input-group-append float-right" role="group">
-                                                            <button type="button" class="btn btn-outline-light btn-sm">
-                                                                <img src="/img/pencil.svg" alt="Edit" title="edit">
-                                                            </button>
-                                                            <button type="button" class="btn btn-outline-light btn-sm">
+                                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/edit/' + ${task.id}"
+                                                               class="btn btn-outline-dark btn-sm">
+                                                                <img src="/img/pencil.svg" alt="Delete" title="Delete">
+                                                            </a>
+                                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/delete/' + ${task.id}"
+                                                               class="btn btn-outline-dark btn-sm">
                                                                 <img src="/img/trash.svg" alt="Delete" title="Delete">
-                                                            </button>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </li>
