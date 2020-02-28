@@ -20,6 +20,9 @@ public class ListsService {
     private TasksRepository tasksRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private AccountService accountService;
 
     public TasksList createDefaultList(User savedUser) {
@@ -42,6 +45,24 @@ public class ListsService {
         User currentUser = accountService.getCurrentUser();
         TasksList list = new TasksList(newListRequest.getName(), currentUser);
         accountService.setActiveList(listsRepository.saveAndFlush(list).getId());
+        return "redirect:/";
+    }
+
+    public String delete(int listId) {
+        User currentUser = accountService.getCurrentUser();
+        TasksList listToDelete = findById(listId);
+        if (listToDelete != null && currentUser.getLists().contains(listToDelete)) {
+            currentUser.getLists().remove(listToDelete);
+            listsRepository.deleteById(listId);
+            if (currentUser.getLists().size() == 0) {
+                currentUser.setActiveList(createDefaultList(currentUser));
+            } else {
+                TasksList newActiveList = currentUser.getLists().get(0);
+                currentUser.setActiveList(newActiveList);
+            }
+            userRepository.save(currentUser);
+        }
+
         return "redirect:/";
     }
 }

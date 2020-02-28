@@ -69,9 +69,15 @@
                         <div id="myModal" class="modal d-block position-relative copyable" tabIndex="-1" role="dialog"
                             aria-hidden="true">
                             <div class="modal-dialog modal-lg" th:object="${activeList}">
-                                <div class="modal-content">
+                                <div class="modal-content clearfix">
                                     <div class="modal-header">
-                                        <h3 class="text-primary" th:text="${activeList.name}">To-Do</h3>
+                                        <h3 class="text-primary float-left" th:text="${activeList.name}">To-Do</h3>
+                                        <div class="btn-group float-right" role="group" aria-label="list controls">
+                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/delete'"
+                                               class="btn btn-outline-dark btn-sm">
+                                                <img src="/img/trash.svg" alt="Delete" title="Delete">
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="modal-body">
                                         <div class="container-fluid">
