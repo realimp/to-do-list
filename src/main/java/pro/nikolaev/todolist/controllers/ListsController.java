@@ -52,6 +52,11 @@ public class ListsController {
         return "index";
     }
 
+    @GetMapping("/lists/{id}/delete")
+    public String deleteList(@PathVariable int id, Model model) {
+        return listsService.delete(id);
+    }
+
     @PostMapping("/")
     public String addTask(@ModelAttribute("task") @Valid AddTaskRequest addTaskRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
