@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/theme.min.css}" />
+
+    <title>To-do List</title>
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" id="navbar">
+        <div class="container">
+            <a class="navbar-brand mr-1 mb-1 mt-0" href="../">Simple To-Do List</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-center" id="collapsingNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="layoutDd" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Lists
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="layoutDd" th:object="${taskLists}">
+                            <a class="dropdown-item px-2"
+                               th:each="list : ${taskLists}"
+                               th:text="${list.name}"
+                               th:href="'/lists/' + ${list.id}"></a>
+                            <div class="dropdown-divider"></div>
+                            <form th:action="@{/lists}" th:object="${newList}" method="post">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" id="newList" name="newList" th:field="*{name}"
+                                               class="form-control" placeholder="New List" />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-light rounded-right" type="button">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDd" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Account
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDd">
+                            <a class="dropdown-item px-2" href="/account/profile">My Profile</a>
+                            <a class="dropdown-item px-2" href="/account/settings">Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item px-2" href="/auth/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section id="modals" class="container mt-5 pb-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="container-fluid">
+                    <div class="position-relative" style="z-index:1000">
+                        <div id="myModal" class="modal d-block position-relative copyable" tabIndex="-1" role="dialog"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg" th:object="${activeList}">
+                                <div class="modal-content clearfix">
+                                    <div class="modal-header">
+                                        <h3 class="text-primary float-left" th:text="${activeList.name}">To-Do</h3>
+                                        <div class="btn-group float-right" role="group" aria-label="list controls">
+                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/delete'"
+                                               class="btn btn-outline-dark btn-sm">
+                                                <img src="/img/trash.svg" alt="Delete" title="Delete">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <ul class="list-group list-group-flush" th:object="${activeList.tasks}">
+                                                <li class="list-group-item"
+                                                    th:each="task : ${activeList.tasks}">
+                                                    <div class="clearfix input-group">
+                                                        <div class="input-group-prepend">
+                                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/toggle/' + ${task.id}"
+                                                               class="btn btn-outline-dark btn-sm">
+                                                                    <img src="/img/check-circle.svg" alt="done" title="done" class="position-relative" th:classappend="${task.completed} ? visible : 'invisible d-none'">
+                                                                    <img src="/img/circle.svg" alt="undone" title="undone" class="position-relative" th:classappend="${task.completed} ? 'invisible d-none' : visible">
+                                                            </a>
+                                                        </div>
+                                                        <input type="text" readonly class="form-control-plaintext text-primary form-control-sm ml-3" id="staticEmail"
+                                                         th:value="${task.task}">
+                                                        <div class="btn-group input-group-append float-right" role="group">
+                                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/edit/' + ${task.id}"
+                                                               class="btn btn-outline-dark btn-sm">
+                                                                <img src="/img/pencil.svg" alt="Delete" title="Delete">
+                                                            </a>
+                                                            <a role="button" th:href="'/lists/' + ${activeList.id} + '/delete/' + ${task.id}"
+                                                               class="btn btn-outline-dark btn-sm">
+                                                                <img src="/img/trash.svg" alt="Delete" title="Delete">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form th:action="@{/}" th:object="${task}" method="post">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input type="text" id="newtask" name="newtask" th:field="*{task}"
+                                                        class="form-control" placeholder="Add new task ..." />
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-primary rounded-right" type="button">Add</button>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script th:src="|/js/jquery-3.4.1.min.js|"></script>
+    <script th:src="|/js/bootstrap.min.js|"></script>
+
+</body>
+
+</html>

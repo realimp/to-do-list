@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/theme.min.css}" />
+
+    <title>To-do List</title>
+</head>
+
+<body>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" id="navbar">
+    <div class="container">
+        <a class="navbar-brand mr-1 mb-1 mt-0" href="../">Simple To-Do List</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse justify-content-center" id="collapsingNavbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="layoutDd" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Lists
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="layoutDd" th:object="${taskLists}">
+                        <a class="dropdown-item px-2"
+                           th:each="list : ${taskLists}"
+                           th:text="${list.name}"
+                           th:href="'/lists/' + ${list.id}"></a>
+                        <div class="dropdown-divider"></div>
+                        <form th:action="@{/lists}" th:object="${newList}" method="post">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" id="newList" name="newList" th:field="*{name}"
+                                           class="form-control" placeholder="New List" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-light rounded-right" type="button">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDd" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDd">
+                        <a class="dropdown-item px-2" href="/account/profile">My Profile</a>
+                        <a class="dropdown-item px-2" href="/account/settings">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item px-2" href="/auth/logout">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section class="container mt-5">
+    <br/>
+</section>
+<section class="container mt-5">
+    <div class="row">
+        <div class="col-auto">
+            <div class="card border-primary h-100 pr-5">
+                <div class="card-body d-flex flex-column align-items-start">
+                    <h2 class="card-title text-primary">Settings</h2>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+                        Delete my account
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Delete?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete your account
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                    <a class="btn btn-primary" href="/account/delete" role="button">Yes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script th:src="|/js/jquery-3.4.1.min.js|"></script>
+<script th:src="|/js/bootstrap.min.js|"></script>
+
+</body>
+
+</html>
